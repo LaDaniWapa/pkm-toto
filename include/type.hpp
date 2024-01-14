@@ -60,10 +60,10 @@ class Type {
     }
 };
 
-Type::Type(PokemonType type) {
+inline Type::Type(PokemonType type) {
     rect = Rectangle{0, ((float)type) * 28, 64, ((float)type + 1) * 28};
 }
 
-Type::~Type() {}
+inline Type::~Type() {}
 
 #endif  // Type_HPP

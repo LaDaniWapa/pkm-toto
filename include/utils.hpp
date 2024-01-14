@@ -1,9 +1,9 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
-#define PGREY 
 #define PKGREY      CLITERAL(Color){ 72, 72, 72, 255 }
-
+#define IV (std::rand() % 32)  // Random 0 ~ 31
+#define EV 510                 // Max EV
 
 #include <raylib.h>
 #include <time.h>
@@ -35,14 +35,14 @@ typedef struct Pkm {
  *
  * @param pokemon La estructura del Pokémon que se imprimirá.
  */
-void printPokemon(const Pkm& pokemon);
+void printBattler(const Pkm& pokemon);
 
 /**
  * @brief Imprime los detalles de un Pokémon en formato hexadecimal.
  *
  * @param pokemon La estructura del Pokémon que se imprimirá en formato hexadecimal.
  */
-void printPokemonHex(const Pkm& pokemon);
+void printBattlerHex(const Pkm& pokemon);
 
 /**
  * @brief Genera la ruta a un archivo de imagen de un Pokémon aleatorio.
@@ -60,7 +60,7 @@ std::string randomPkm(bool back = false);
  *
  * @return La textura del Pokémon especificado.
  */
-Texture2D getPokemonTexture(int pokemonPokedexNumber, bool back = false);
+Texture2D getBattlerTexture(int pokemonPokedexNumber, bool shiny, bool back);
 
 /**
  * @brief Guarda un Pokémon en pokedex.dat.
@@ -76,13 +76,13 @@ void saveToFile(const Pkm& pkm);
  * @param pkm La estructura donde se almacenarán los datos del Pokémon.
  * @return true si la lectura fue exitosa, false en caso contrario.
  */
-bool readPokemonFromFile(uint16_t pokedexNumber, Pkm& pkm);
+bool readBattlerFromFile(uint16_t pokedexNumber, Pkm& pkm);
 
 /**
  * @brief Guarda datos de Pokémon desde un archivo CSV a pokedex.dat.
  *
  * @return true si la operación fue exitosa, false en caso contrario.
  */
-bool savePokemonsToDatFile();
+bool savePBattlersToDatFile();
 
 #endif  // UTILS_HPP
