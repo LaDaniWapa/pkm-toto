@@ -5,6 +5,8 @@
 #define IV (std::rand() % 32)  // Random 0 ~ 31
 #define EV 510                 // Max EV
 
+// Color palette
+
 #include <raylib.h>
 #include <time.h>
 
@@ -60,7 +62,7 @@ std::string randomPkm(bool back = false);
  *
  * @return La textura del Pokémon especificado.
  */
-Texture2D getBattlerTexture(int pokemonPokedexNumber, bool shiny, bool back);
+Texture2D getPokemonTexture(int pokemonPokedexNumber, bool shiny, bool back);
 
 /**
  * @brief Guarda un Pokémon en pokedex.dat.
@@ -76,13 +78,13 @@ void saveToFile(const Pkm& pkm);
  * @param pkm La estructura donde se almacenarán los datos del Pokémon.
  * @return true si la lectura fue exitosa, false en caso contrario.
  */
-bool readBattlerFromFile(uint16_t pokedexNumber, Pkm& pkm);
+bool readPokemonFromFile(uint16_t pokedexNumber, Pkm& pkm);
 
 /**
  * @brief Guarda datos de Pokémon desde un archivo CSV a pokedex.dat.
  *
  * @return true si la operación fue exitosa, false en caso contrario.
  */
-bool savePBattlersToDatFile();
+bool savePokemonsToDatFile();
 
 #endif  // UTILS_HPP

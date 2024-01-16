@@ -1,26 +1,28 @@
-#include "screenManager.hpp"
-#include <raylib.h>
+#include "TitleScreen.hpp"
 
-class TitleScreen : public Screen {
-    private:
-    Texture2D background;
+void TitleScreen::Load() {
+    background = LoadTexture("assets/title.png");
+}
 
-    public:
-    void Load() override {
-        background = LoadTexture("assets/title.png");
-    }
+void TitleScreen::Unload() {
+    UnloadTexture(background);
+}
 
-    void Unload() override {
-        UnloadTexture(background);
-    }
+void TitleScreen::Update() {
+    if (IsKeyPressed(KEY_ENTER)) {
+        BattlersChooserScreen *battlerChooserScreen =
+            dynamic_cast<BattlersChooserScreen *>(screenManager->getScreen("BattlersChooser"));
 
-    void Update() override {
-        if (IsKeyPressed(KEY_ENTER)) {
-            screenManager->ChangeScreen("Battle");
+        if (battlerChooserScreen) {
+            // Generar pokemons random
+            battlerChooserScreen->setPokemon(rand() % 155 + 494);
+            battlerChooserScreen->setFoePokemon(rand() % 155 + 494);
+            screenManager->ChangeScreen("BattlersChooser");
         }
     }
+}
 
-    void Draw() override {
-        DrawTexture(background, 0, 0, WHITE);
-    }
-};
+void TitleScreen::Draw() {
+    ClearBackground(BLACK);
+    DrawTexture(background, 0, 0, WHITE);
+}

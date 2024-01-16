@@ -6,7 +6,7 @@ Battler::Battler(int pokedexNumber, int level, bool shiny, bool foe, Font& font,
     this->fontB = fontB;
     this->level = level;
 
-    if (readBattlerFromFile(pokedexNumber, basePkm)) {
+    if (readPokemonFromFile(pokedexNumber, basePkm)) {
         //printBattler(basePkm);
 
         maxPS = ((basePkm.ps * 2 + IV + EV / 4) * level / 100) + 10 + level;
@@ -19,7 +19,7 @@ Battler::Battler(int pokedexNumber, int level, bool shiny, bool foe, Font& font,
         speed = getStat(basePkm.speed);
         male = std::rand() % 2;
 
-        battlerTexture = getBattlerTexture(pokedexNumber, shiny, !foe);
+        battlerTexture = getPokemonTexture(pokedexNumber, shiny, !foe);
         health = LoadTexture("assets/overlay_hp.png");
 
         if (foe) {

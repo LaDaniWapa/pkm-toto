@@ -58,6 +58,8 @@ class Type {
     double getEffectiveness(PokemonType attacker, PokemonType defender) const {
         return effectivenessChart[attacker][defender];
     }
+
+    Rectangle getTypeRect();
 };
 
 inline Type::Type(PokemonType type) {
@@ -65,5 +67,9 @@ inline Type::Type(PokemonType type) {
 }
 
 inline Type::~Type() {}
+
+inline Rectangle Type::getTypeRect() {
+    return rect;
+}
 
 #endif  // Type_HPP

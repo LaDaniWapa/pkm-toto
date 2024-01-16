@@ -34,10 +34,8 @@ std::string randomPkm(bool back) {
     return "assets/gen5pkm/" + std::to_string(randomPkm) + (back ? "b.png" : ".png");
 }
 
-Texture2D getBattlerTexture(int battlerPokedexNumber, bool shiny, bool back) {
-    
+Texture2D getPokemonTexture(int battlerPokedexNumber, bool shiny, bool back) {
     std::string str = "assets/gen5pkm/" + std::to_string(battlerPokedexNumber) + (shiny ? "s" : "") + (back ? "b" : "") + ".png";
-
     return LoadTexture(str.c_str());
 }
 
@@ -53,7 +51,7 @@ void saveToFile(const Pkm& pkm) {
     }
 }
 
-bool readBattlerFromFile(uint16_t pokedexNumber, Pkm& pkm) {
+bool readPokemonFromFile(uint16_t pokedexNumber, Pkm& pkm) {
     std::ifstream inFile("pokedex.dat", std::ios::binary);
 
     if (!inFile.is_open()) {
@@ -78,7 +76,7 @@ bool readBattlerFromFile(uint16_t pokedexNumber, Pkm& pkm) {
     return true;
 }
 
-bool saveBattlersToDatFile() {
+bool savePokemonsToDatFile() {
     Pkm pkm;
     std::ifstream inputFile("P2.csv");
 

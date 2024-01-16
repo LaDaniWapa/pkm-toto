@@ -12,6 +12,7 @@
                 "-o",
                 "main",
                 "src/*.cpp",
+                "screens/*.cpp",
                 "-lraylib",
                 "-lGL",
                 "-lm",

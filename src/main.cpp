@@ -1,10 +1,15 @@
 
 #include "battler.hpp"
-#include "screens.h"
 #include "type.hpp"
 #include "utils.hpp"
 
-void init() {
+#include "screenManager.hpp"
+#include "../screens/TitleScreen.hpp"
+#include "../screens/BattlersChooserScreen.hpp"
+#include "../screens/BattlerListScreen.hpp"
+#include "../screens/BattleScreen.hpp"
+
+int main() {
     // Randomize
     srand(time(0));
 
@@ -12,7 +17,7 @@ void init() {
     SetTraceLogLevel(LOG_ERROR);
 
     // Tamaño pantalla nintendo ds x2(images) x2(virtual screen)
-    InitWindow(512 * 2, 384 * 2, "Pokemon ToTo");
+    InitWindow(1024, 768, "Pokemon ToTo");
 
     // Poner icono a la ventana
     Image icon = LoadImage("assets/icon.png");
@@ -20,10 +25,6 @@ void init() {
 
     // Ajustar a 60 FPS
     SetTargetFPS(60);
-}
-
-int main() {
-    init();
 
     Camera2D worldSpaceCamera = {0};  // Game world camera
     worldSpaceCamera.zoom = 1.0f;
@@ -50,10 +51,18 @@ int main() {
     battleScreen.SetScreenManager(&screenManager);
     screenManager.AddScreen("Battle", &battleScreen);
 
+    BattlersChooserScreen battlersChooserScreen;
+    battlersChooserScreen.SetScreenManager(&screenManager);
+    screenManager.AddScreen("BattlersChooser", &battlersChooserScreen);
+
+    BattlersListScreen battlersListScreen;
+    battlersListScreen.SetScreenManager(&screenManager);
+    screenManager.AddScreen("BattlersList", &battlersListScreen);
+
     screenManager.ChangeScreen("Title");
 
-    // Texture2D background = LoadTexture("assets/BattleBacks/field_bg.png");    // 512x288
-    // Texture2D message = LoadTexture("assets/BattleBacks/field_message.png");  // 512x96
+    // Texture2D background = LoadTexture("assets/BattleBacks/field_bg.png");
+    // Texture2D message = LoadTexture("assets/BattleBacks/field_message.png");
 
     // Font font = LoadFontEx("assets/fonts/pokemon-b-w.ttf", 60, 0, 0);
     // Font fontB = LoadFontEx("assets/fonts/pkmndpb.ttf", 30, 0, 0);
@@ -78,7 +87,7 @@ int main() {
 
         BeginMode2D(worldSpaceCamera);
 
-        ClearBackground(BLACK);
+        ClearBackground(DARKGRAY);
         screenManager.Update();
         screenManager.Draw();
 
@@ -86,13 +95,14 @@ int main() {
         // pokemonfoe->draw();
         // pokemon->draw();
         // DrawTexture(message, 0, 288, WHITE);
+        // DrawFPS(10, 360);
         EndMode2D();
 
         EndTextureMode();
 
         // Draw target into screen (screen space)
         BeginDrawing();
-        ClearBackground(BLACK);
+        ClearBackground(DARKGRAY);
         BeginMode2D(screenSpaceCamera);
         DrawTexturePro(target.texture, sourceRec, destRec, origin, 0.0f, WHITE);
         EndMode2D();
