@@ -1,38 +1,35 @@
-CC := g++
-CFLAGS := -std=c++11 -g
-LIBS := -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
-INC := -I include
-SRCDIR := src
-SCREENDIR := screens
-BUILDDIR := build
-BINDIR := bin
+# Compiler and flags
+CC = g++
+CFLAGS = -std=c++11 -g -I include -o main
 
-SRCEXT := cpp
-SRC_SOURCES := $(wildcard $(SRCDIR)/*.cpp)
-SCREEN_SOURCES := $(wildcard $(SCREENDIR)/*.cpp)
-OBJECTS := $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SRC_SOURCES)) \
-           $(patsubst $(SCREENDIR)/%.cpp,$(BUILDDIR)/%.o,$(SCREEN_SOURCES))
-TARGET := $(BINDIR)/pkmtoto
+# Source and object files
+SRC_DIRS = src screens
+SRCS = $(wildcard $(addsuffix /*.cpp,$(SRC_DIRS)))
+OBJS = $(patsubst %.cpp,build/%.o,$(SRCS))
 
-$(TARGET): $(OBJECTS)
-	@mkdir -p $(BINDIR)
-	$(CC) $^ -o $@ $(LIBS)
+# Raylib libraries
+RAYLIB_LIBS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -fdiagnostics-color
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
-	@mkdir -p $(BUILDDIR)
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+# Default target
+all: build bin/pokemonToto
 
-$(BUILDDIR)/%.o: $(SCREENDIR)/%.cpp | $(BUILDDIR)
-	@mkdir -p $(BUILDDIR)
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+# Build target
+build:
+	@mkdir -p build/screens build/src bin
 
-$(BUILDDIR):
-	@mkdir -p $(BUILDDIR)
+# Compile object files
+build/%.o: %.cpp | build
+	$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY: clean
+# Build main executable
+bin/pokemonToto: $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(RAYLIB_LIBS) -o bin/pokemonToto
+
+# Clean up object files and the executable
 clean:
-	@rm -rf $(BUILDDIR) $(BINDIR)
+	rm -rf build bin
 
-.PHONY: run
-run: $(TARGET)
-	./$(TARGET)
+run: bin/pokemonToto
+	@./bin/pokemonToto
+
+re: clean run

@@ -15,6 +15,8 @@ class BattlersChooserScreen : public Screen {
     Texture2D pokemonTexture, pokemonFoeTexture;
     // Textura de los tipos
     Texture2D typesTexture;
+    // Texture de estrellita shiny
+    Texture2D shinyStar;
     // Fuente
     Font font;
     // Estructura de los pokemons
@@ -28,7 +30,9 @@ class BattlersChooserScreen : public Screen {
     // Posicion del raton
     Vector2 mousePoint{.0f, .0f};
     // Usar outlineShader o no
-    bool pokemonShader = false, pokemonFoeShader = false;
+    bool pokemonShader = false, pokemonFoeShader = false, hoverButton = false;
+    // Cambiar pokemon a shiny
+    bool pokemonShiny = false, pokemonFoeShiny = false;
 
    public:
     void Load() override;
@@ -38,6 +42,8 @@ class BattlersChooserScreen : public Screen {
 
     void setPokemon(int pokedexnumber);
     void setFoePokemon(int pokedexnumber);
+
+    void toggleShiny(bool foe);
 };
 
 #endif  // BATTLERCHOOSERSCREEN_HPP

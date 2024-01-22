@@ -1,5 +1,0 @@
-#include "../screens/BattleScreen.hpp"
-#include "../screens/TitleScreen.hpp"
-#include "../screens/BattlersChooserScreen.hpp"
-#include "../screens/BattlerListScreen.hpp"
-#include "screenManager.hpp"

@@ -7,8 +7,8 @@ void BattleScreen::Load() {
     background = LoadTexture("assets/BattleBacks/field_bg.png");
     message = LoadTexture("assets/BattleBacks/field_message.png");
 
-    pokemon = new Battler(pokemonPokedexNumber, 100, false, false, font, fontB);
-    pokemonFoe = new Battler(pokemonFoePokedexNumber, 100, false, true, font, fontB);
+    pokemon = new Battler(pokemonPokedexNumber, 100, pokemonShiny, false, font, fontB);
+    pokemonFoe = new Battler(pokemonFoePokedexNumber, 100, pokemonFoeShiny, true, font, fontB);
 }
 
 void BattleScreen::Unload() {
@@ -31,10 +31,12 @@ void BattleScreen::Draw() {
     DrawTexture(message, 0, 288, WHITE);
 }
 
-void BattleScreen::setPokemonPokedexNumber(int n) {
-    pokemonPokedexNumber = n;
+void BattleScreen::setPokemon(int pokedexNumber, bool shiny) {
+    pokemonPokedexNumber = pokedexNumber;
+    pokemonShiny = shiny;
 }
 
-void BattleScreen::setPokemonFoePokedexNumber(int n) {
-    pokemonFoePokedexNumber = n;
+void BattleScreen::setPokemonFoe(int pokedexNumber, bool shiny) {
+    pokemonFoePokedexNumber = pokedexNumber;
+    pokemonFoeShiny = shiny;
 }

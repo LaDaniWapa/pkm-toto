@@ -1,7 +1,7 @@
 #include "BattlersChooserScreen.hpp"
 
 void BattlersChooserScreen::Load() {
-    // Cargar fuente necesarioa
+    // Cargar fuente necesaria
     font = LoadFontEx("assets/fonts/pokemon-b-w.ttf", 60, 0, 0);
 
     // Cargar shader
@@ -24,11 +24,21 @@ void BattlersChooserScreen::Load() {
 
     // Cargar texturas de pokemons y tipos
     typesTexture = LoadTexture("assets/types.png");
-    pokemonTexture = getPokemonTexture(pkxn, false, false);
-    pokemonFoeTexture = getPokemonTexture(pkxnF, false, false);
+    pokemonTexture = getPokemonTexture(pkxn, pokemonShiny, false);
+    pokemonFoeTexture = getPokemonTexture(pkxnF, pokemonFoeShiny, false);
+
     // Cargar datos de los pokemons generados aleatoriamente
     readPokemonFromFile(pkxn, pokemon);
     readPokemonFromFile(pkxnF, pokemonFoe);
+
+    // Actualizar textura de los tipos
+    type1 = Rectangle{0, ((float)pokemon.type1 - 1) * 28, 64, 28};
+    type2 = Rectangle{0, ((float)pokemon.type2 - 1) * 28, 64, 28};
+    type1Foe = Rectangle{0, ((float)pokemonFoe.type1 - 1) * 28, 64, 28};
+    type2Foe = Rectangle{0, ((float)pokemonFoe.type2 - 1) * 28, 64, 28};
+
+    // Cargar estrellita shiny
+    shinyStar = LoadTexture("assets/shiny_star.png");
 }
 
 void BattlersChooserScreen::Unload() {
@@ -44,7 +54,24 @@ void BattlersChooserScreen::Update() {
     // Actualizar los shaders
     pokemonShader = false;
     pokemonFoeShader = false;
+    hoverButton = false;
 
+    // Mirar si se hace clic en el boton
+    if (CheckCollisionPointRec(mousePoint, Rectangle{322, 618, 400, 100})) {
+        hoverButton = true;
+
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+            BattleScreen* battleScreen = dynamic_cast<BattleScreen*>(screenManager->getScreen("Battle"));
+
+            if (battleScreen) {
+                battleScreen->setPokemon(pokemon.ID, pokemonShiny);
+                battleScreen->setPokemonFoe(pokemonFoe.ID, pokemonFoeShiny);
+                screenManager->ChangeScreen("Battle");
+            }
+        }
+    }
+
+    // Mirar si se hace clic en el pokemon
     // La funcion usa la resolucion final de la pantalla (x2)
     if (CheckCollisionPointCircle(mousePoint, Vector2{256, 282}, 192)) {
         pokemonShader = true;
@@ -59,8 +86,13 @@ void BattlersChooserScreen::Update() {
                 screenManager->ChangeScreen("BattlersList");
             }
         }
+
+        if (IsKeyReleased(KEY_S)) {
+            toggleShiny(false);
+        }
     }
 
+    // Mirar si se hace clic en el pokemon
     // La funcion usa la resolucion final de la pantalla (x2)
     if (CheckCollisionPointCircle(mousePoint, Vector2{768, 282}, 192)) {
         pokemonFoeShader = true;
@@ -75,14 +107,9 @@ void BattlersChooserScreen::Update() {
                 screenManager->ChangeScreen("BattlersList");
             }
         }
-    }
 
-    if (IsKeyPressed(KEY_ENTER)) {
-        BattleScreen* battleScreen = dynamic_cast<BattleScreen*>(screenManager->getScreen("Battle"));
-        if (battleScreen) {
-            battleScreen->setPokemonPokedexNumber(pokemon.ID);
-            battleScreen->setPokemonFoePokedexNumber(pokemonFoe.ID);
-            screenManager->ChangeScreen("Battle");
+        if (IsKeyReleased(KEY_S)) {
+            toggleShiny(true);
         }
     }
 }
@@ -111,9 +138,31 @@ void BattlersChooserScreen::Draw() {
     } else
         DrawTexture(pokemonFoeTexture, 288, 45, WHITE);
 
-    // Boton para empezar
-    DrawRectangle(161, 309, 200, 50, GRAY);
-    DrawText("START BATTLE", 178, 325, 20, RED);
+    // Dibujar estrella shiny
+    if (pokemonShiny) DrawTexture(shinyStar, 184, 197, WHITE);
+    if (pokemonFoeShiny) DrawTexture(shinyStar, 440, 197, WHITE);
+
+    // Dibujar tipos de los pokemons
+    if (pokemon.type2) {
+        DrawTextureRec(typesTexture, type1, Vector2{55, 232}, WHITE);
+        DrawTextureRec(typesTexture, type2, Vector2{130, 232}, WHITE);
+    } else
+        DrawTextureRec(typesTexture, type1, Vector2{92.5f, 232}, WHITE);
+
+    if (pokemonFoe.type2) {
+        DrawTextureRec(typesTexture, type1Foe, Vector2{315, 232}, WHITE);
+        DrawTextureRec(typesTexture, type2Foe, Vector2{390, 232}, WHITE);
+    } else
+        DrawTextureRec(typesTexture, type1Foe, Vector2{352.5f, 232}, WHITE);
+
+    // Dibujar boton para empezar
+    if (hoverButton) {
+        DrawRectangle(161, 309, 200, 50, Color{70, 70, 70, 255});
+        DrawText("START BATTLE", 178, 325, 20, Color{160, 0, 0, 255});
+    } else {
+        DrawRectangle(161, 309, 200, 50, Color{40, 40, 40, 255});
+        DrawText("START BATTLE", 178, 325, 20, Color{230, 41, 55, 255});
+    }
 }
 
 void BattlersChooserScreen::setPokemon(int pokedexnumber) {
@@ -122,4 +171,14 @@ void BattlersChooserScreen::setPokemon(int pokedexnumber) {
 
 void BattlersChooserScreen::setFoePokemon(int pokedexnumber) {
     pkxnF = pokedexnumber;
+}
+
+void BattlersChooserScreen::toggleShiny(bool foe) {
+    if (foe) {
+        pokemonFoeShiny = !pokemonFoeShiny;
+        pokemonFoeTexture = getPokemonTexture(pkxnF, pokemonFoeShiny, false);
+    } else {
+        pokemonShiny = !pokemonShiny;
+        pokemonTexture = getPokemonTexture(pkxn, pokemonShiny, false);
+    }
 }

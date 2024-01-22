@@ -1,0 +1,14 @@
+- [ ] Pokemon List boxes background texture  
+- [ ] Pokemon List boxes buttons  
+- [ ] Title Screen Texture  
+- [ ] Title Screen Animations  
+- [ ] Title Screen Buttons??  
+- [x] Battlers Chooser Screen display pokemon type(s)  
+- [x] Battlers Chooser & Battle screens shiny pokemons  
+- [ ] Options Screen??  
+- [ ] Attacks  
+  
+- [ ] Improve UI and scaling  
+- [ ] Animations  
+- [ ] Port to other platforms  
+- [ ] Play with friends  

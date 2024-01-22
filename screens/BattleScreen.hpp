@@ -12,6 +12,7 @@ class BattleScreen : public Screen {
     Battler *pokemon, *pokemonFoe;
     Font font, fontB;
     int pokemonPokedexNumber = 494, pokemonFoePokedexNumber = 494;
+    bool pokemonShiny, pokemonFoeShiny;
 
    public:
     void Load() override;
@@ -19,8 +20,8 @@ class BattleScreen : public Screen {
     void Update() override;
     void Draw() override;
 
-    void setPokemonPokedexNumber(int n);
-    void setPokemonFoePokedexNumber(int n);
+    void setPokemon(int pokedexNumber, bool shiny);
+    void setPokemonFoe(int pokedexNumber, bool shiny);
 };
 
 #endif  // BATTLESCREEN_HPP
